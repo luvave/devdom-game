@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Route } from '../routes';
 import { Spinner } from './Spinner';
 
-export function Pager({ protected: routeProtected, element }: Route) {
+export const Pager = ({ protected: routeProtected, element }: Route) => {
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
 
@@ -15,4 +15,4 @@ export function Pager({ protected: routeProtected, element }: Route) {
   }, [pathname, search]);
 
   return <Suspense fallback={<Spinner />}>{element}</Suspense>;
-}
+};

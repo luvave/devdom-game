@@ -1,9 +1,9 @@
 import { HTMLAttributes, useEffect } from 'react';
 import { themeChange } from 'theme-change';
 
-export function ThemeChanger({
+export const ThemeChanger = ({
   className,
-}: HTMLAttributes<HTMLLabelElement>) {
+}: HTMLAttributes<HTMLLabelElement>) => {
   useEffect(() => {
     themeChange(false);
   }, []);
@@ -37,4 +37,4 @@ export function ThemeChanger({
       </svg>
     </label>
   );
-}
+};

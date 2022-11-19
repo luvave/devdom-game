@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { O } from 'ts-toolbelt';
 import { MainLayout } from '../layouts/MainLayout';
+import { HomeRoute } from '../constants/routes';
 
 type RoutePath = O.AtLeast<{ path: string; index: boolean }, 'path' | 'index'>;
 
@@ -21,7 +22,7 @@ const Home = lazy(() => import('../views/Home'));
 
 const routes: RouteGroup[] = [
   {
-    layout: { path: '/', element: <MainLayout /> },
+    layout: { path: HomeRoute, element: <MainLayout /> },
     routes: [
       {
         index: true,

@@ -1,5 +1,4 @@
-export function ErrorFallback() {
-  return (
+export const ErrorFallback = () => (
     <div className="flex h-screen">
       <div className="m-auto text-center">
         <h1 className="font-serif text-xl">Oops! something went wrong...</h1>
@@ -11,5 +10,4 @@ export function ErrorFallback() {
         </a>
       </div>
     </div>
-  );
-}
+);

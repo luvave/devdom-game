@@ -1,9 +1,7 @@
-function Home() {
-  return (
-    <div className="flex h-screen">
+const Home = () => (
+    <div>
       React Game
     </div>
-  );
-}
+);
 
 export default Home;

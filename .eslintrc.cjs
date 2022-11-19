@@ -24,6 +24,7 @@ module.exports = {
     "react/function-component-definition": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "react/no-array-index-key": "warn"
+    "react/no-array-index-key": "warn",
+    "linebreak-style": "off"
   }
 }
