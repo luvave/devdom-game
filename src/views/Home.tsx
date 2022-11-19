@@ -1,7 +1,10 @@
+import { PageContainer } from '../layouts/PageContainer';
+import { CardGame } from '../components/CardGame/CardGame';
+
 const Home = () => (
-    <div>
-      React Game
-    </div>
+    <PageContainer>
+      <CardGame />
+    </PageContainer>
 );
 
 export default Home;
