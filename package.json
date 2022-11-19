@@ -5,9 +5,6 @@
   "author": "luvave",
   "version": "0.0.0",
   "type": "module",
-  "engines": {
-    "node": "^19"
-  },
   "scripts": {
     "start": "vite",
     "lint": "eslint . --ext .js --ext .jsx --ext .tsx --ext .ts --ignore-pattern node_modules/",
