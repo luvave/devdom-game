@@ -8,7 +8,7 @@ export const CardGame = () => {
   const [round, setRound] = useState<number>(1);
   const { data } = useMostRelatedEntities({
     numberOfEntities: 4,
-    initialEntityName: 'Photon',
+    initialEntityName: 'Pinocchio',
   });
 
   return (

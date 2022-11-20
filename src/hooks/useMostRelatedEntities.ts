@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BasicError } from '../types/errors';
 import { MostRelatedEntity } from '../types/relatedEntities';
-import { getMostRelatedEntity, getSingleEntity } from '../utils/SparqlClient';
-import { getNameFromUri } from '../utils/dbpedia';
+import { getMostRelatedEntities, getSingleEntity } from '../utils/SparqlClient';
+import { getNameFromUri } from '../constants/sparql';
 
 interface Props {
   initialEntityName: string;
@@ -33,13 +33,20 @@ export const useMostRelatedEntities: (props: Props) => UseMostRelatedEntitiesRet
       initial.entity.value = getNameFromUri(initial.entity.value);
       newData.push(initial);
       // eslint-disable-next-line no-plusplus
-      for (let i = 1; i <= numberOfEntities; i++) {
-        // TODO: Fix await inside loops
+      for (let i = 1; newData.length <= numberOfEntities; i++) {
+        // TODO: Fix await inside loops and maybe refactor logic
         // eslint-disable-next-line no-await-in-loop
-        const result = await getMostRelatedEntity(currentName);
-        currentName = getNameFromUri(result.entity.value);
-        result.entity.value = currentName;
-        newData.push(result);
+        const result = await getMostRelatedEntities(currentName);
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        result.every((res) => {
+          if (!newData.find((ent) => ent.entity.value === getNameFromUri(res.entity.value))) {
+            currentName = getNameFromUri(res.entity.value);
+            res.entity.value = currentName;
+            newData.push(res);
+            return false;
+          }
+          return true;
+        });
       }
       setData(newData);
     } catch (e: any) {

@@ -2,7 +2,7 @@ import ParsingClient from 'sparql-http-client/ParsingClient';
 import {
   DBPEDIA_MOST_RELATED_ENTITY_SPARQL,
   DBPEDIA_SINGLE_ENTITY_SPARQL,
-  DBPEDIA_SPARQL_ENDPOINT
+  DBPEDIA_SPARQL_ENDPOINT,
 } from '../constants/sparql';
 import { MostRelatedEntity } from '../types/relatedEntities';
 
@@ -24,11 +24,11 @@ export const testConnection = async () => {
   return result;
 };
 
-export const getMostRelatedEntity = async (resource: string) => {
+export const getMostRelatedEntities = async (resource: string) => {
   const result = await client.query.select(DBPEDIA_MOST_RELATED_ENTITY_SPARQL(resource));
   if (Array.isArray(result) && result.length > 0) {
     // TODO: Fix type
-    return result[0] as unknown as MostRelatedEntity;
+    return result as unknown as MostRelatedEntity[];
   }
   throw new Error('Invalid data');
 };
