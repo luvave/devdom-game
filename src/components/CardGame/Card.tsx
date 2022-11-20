@@ -18,12 +18,12 @@ export const Card = ({
     <div className="card w-96 bg-base-100 shadow-xl">
       {typeof imgSrc !== 'undefined' && (
       <figure className="px-10 pt-10">
-        <img src={imgSrc} alt={title} className="rounded-xl" />
+        <img src={imgSrc} alt={title} className="rounded-xl h-64" />
       </figure>
       )}
       <div className="card-body items-center text-center">
         <h2 className="card-title">{title}</h2>
-        <p>{description}</p>
+        <p>{`${description.substring(0, 200)}...`}</p>
         {typeof buttonText !== 'undefined' && (
         <div className="card-actions">
           <button type="button" className="btn btn-primary" onClick={onBtnClick}>{buttonText}</button>

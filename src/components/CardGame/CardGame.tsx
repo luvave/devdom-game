@@ -2,28 +2,31 @@ import { useState } from 'react';
 import { RoundCounter } from './RoundCounter';
 import { Timeline } from './Timeline';
 import { Card } from './Card';
-import { testConnection } from '../../utils/SparqlClient';
+import { useMostRelatedEntities } from '../../hooks/useMostRelatedEntities';
 
 export const CardGame = () => {
-  const [round, setRound] = useState<number>(0);
+  const [round, setRound] = useState<number>(1);
+  const { data } = useMostRelatedEntities({
+    numberOfEntities: 4,
+    initialEntityName: 'Photon',
+  });
+
   return (
     <>
       <RoundCounter currentRound={round} />
       <Timeline />
-      <Card
-        title="Dog"
-        imgSrc="https://upload.wikimedia.org/wikipedia/commons/1/18/Dog_Breeds.jpg"
-        buttonText="hehe"
-        description="Best friend to human"
-        onBtnClick={() => setRound((prevState) => prevState + 1)}
-      />
-      <Card
-        title="Test"
-        imgSrc="https://upload.wikimedia.org/wikipedia/commons/1/18/Dog_Breeds.jpg"
-        buttonText="hehe"
-        description="Best friend to human"
-        onBtnClick={() => testConnection()}
-      />
+      <div className="container flex flex-row mx-auto px-4">
+      {Array.isArray(data) && data.map((val) => (
+        <Card
+          key={val.entity.value}
+          title={val.entity.value}
+          imgSrc={val.image.value}
+          buttonText="hehe"
+          description={val.abs.value}
+          onBtnClick={() => setRound((prevState) => prevState + 1)}
+        />
+      ))}
+      </div>
     </>
   );
 };
