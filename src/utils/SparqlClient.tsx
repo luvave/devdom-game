@@ -1,5 +1,6 @@
 import ParsingClient from 'sparql-http-client/ParsingClient';
 import {
+  DBPEDIA_GET_RANDOM_ENTITY_NAME_SPARQL,
   DBPEDIA_MOST_RELATED_ENTITY_SPARQL,
   DBPEDIA_SINGLE_ENTITY_SPARQL,
   DBPEDIA_SPARQL_ENDPOINT,
@@ -20,15 +21,20 @@ const exampleQuery = 'SELECT *\n'
 
 export const testConnection = async () => {
   const result = await client.query.select(exampleQuery);
-  console.log(result);
   return result;
 };
 
 export const getMostRelatedEntities = async (resource: string) => {
-  const result = await client.query.select(DBPEDIA_MOST_RELATED_ENTITY_SPARQL(resource));
-  if (Array.isArray(result) && result.length > 0) {
+  const result = await client.query.select(DBPEDIA_MOST_RELATED_ENTITY_SPARQL(resource, true));
+  if (Array.isArray(result)) {
     // TODO: Fix type
-    return result as unknown as MostRelatedEntity[];
+    if (result.length > 0) {
+      return result as unknown as MostRelatedEntity[];
+    }
+    const noFilter = await client.query.select(DBPEDIA_MOST_RELATED_ENTITY_SPARQL(resource, false));
+    if (noFilter.length > 0) {
+      return noFilter as unknown as MostRelatedEntity[];
+    }
   }
   throw new Error('Invalid data');
 };
@@ -38,6 +44,15 @@ export const getSingleEntity = async (resource: string) => {
   if (Array.isArray(result) && result.length > 0) {
     // TODO: Fix type
     return result[0] as unknown as MostRelatedEntity;
+  }
+  throw new Error('Invalid data');
+};
+
+export const getRandomEntityName = async (randOffset?: number) => {
+  const result = await client.query.select(DBPEDIA_GET_RANDOM_ENTITY_NAME_SPARQL(randOffset));
+  if (Array.isArray(result) && result.length > 0) {
+    // TODO: Fix type
+    return result as unknown as MostRelatedEntity[];
   }
   throw new Error('Invalid data');
 };

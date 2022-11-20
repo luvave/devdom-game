@@ -1,11 +1,12 @@
-export const DBPEDIA_SPARQL_ENDPOINT = 'https://dbpedia.org/sparql';
+export const TIMEOUT_IN_MS = 6000;
+export const DBPEDIA_SPARQL_ENDPOINT = `https://dbpedia.org/sparql?timeout=${TIMEOUT_IN_MS}`;
 export const DBPEDIA_RESOURCE_URL_PATH = 'http://dbpedia.org/resource/';
 
 export const getNameFromUri = (uri: string): string => uri.replace(DBPEDIA_RESOURCE_URL_PATH, '');
 
 export const escapeRegex = (str: string) => str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
 
-export const DBPEDIA_MOST_RELATED_ENTITY_SPARQL = (resource: string) => `
+export const DBPEDIA_MOST_RELATED_ENTITY_SPARQL = (resource: string, stronglyRelatedFilter: boolean) => `
       PREFIX dbr: <http://dbpedia.org/resource/>
       PREFIX dbo: <http://dbpedia.org/ontology/>\
       PREFIX dbp: <http://dbpedia.org/property/>
@@ -16,7 +17,7 @@ export const DBPEDIA_MOST_RELATED_ENTITY_SPARQL = (resource: string) => `
       dbr:${escapeRegex(resource)} ?property ?entity .
       ?entity dbo:thumbnail ?image; dbo:abstract ?abs .
       
-      FILTER(?property != dbo:wikiPageWikiLink)
+      ${stronglyRelatedFilter ? 'FILTER(?property != dbo:wikiPageWikiLink)' : ''}
       FILTER(langMatches(lang(?abs),"en"))
       
       } GROUP BY ?entity ?image ?abs ORDER BY desc(?count) LIMIT 4
@@ -30,4 +31,16 @@ export const DBPEDIA_SINGLE_ENTITY_SPARQL = (resource: string) => `
        dbr:${escapeRegex(resource)} dbo:thumbnail ?image; dbo:abstract ?abs .
       FILTER(langMatches(lang(?abs),"en"))
       } LIMIT 1
+`;
+
+export const DBPEDIA_GET_RANDOM_ENTITY_NAME_SPARQL = (randOffset?: number) => `
+      SELECT ?entity ?image ?abs
+      WHERE
+        {
+          ?entity dbo:thumbnail ?image; dbo:abstract ?abs .
+          FILTER ( REGEX (STR (?entity), "resource" ) )
+        }
+      ORDER BY RAND()
+      OFFSET ${typeof randOffset !== 'undefined' ? randOffset : 1}
+      LIMIT 300
 `;
